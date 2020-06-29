@@ -1,0 +1,51 @@
+import vendedor.*
+import ciudad.*
+import certificado.*
+import centrosDeDistribucion.*
+
+test "Test" {
+	const buenosAires = new Provincia()
+	const hurlingham = new Ciudad()
+	buenosAires.nombre(buenosAires)
+	hurlingham.provincia(buenosAires)
+	buenosAires.poblacion(2890000)
+	const chubut = new Provincia()
+	const rawson = new Ciudad()
+	chubut.nombre(chubut)
+	rawson.provincia(chubut)
+	chubut.poblacion(556319)
+	const certificado1 = new Certificados(puntos = 10)
+	const certificado2 = new Certificados(puntos =20 , esPorObjetos = false)
+	const certificado3 = new Certificados(puntos = 30)
+	const certificado4 = new Certificados(puntos = 10 , esPorObjetos = false)
+	const centro = new CentroDeDistribucion()
+	centro.ciudad(buenosAires)
+	
+	const franco = new VendedorFijo()
+	franco.ciudad(hurlingham)
+	franco.agregarCerfiticaciones(certificado1)
+	franco.agregarCerfiticaciones(certificado2)
+	const fernando = new Viajante()
+	fernando.trabajaEn(buenosAires)
+	fernando.trabajaEn(chubut)
+	fernando.agregarCerfiticaciones(certificado3)
+	fernando.agregarCerfiticaciones(certificado4)
+	
+	assert.notThat(fernando.influyente())
+	assert.notThat(franco.influyente())
+	
+	centro.vendedorDelCentro(franco)
+	centro.vendedorDelCentro(fernando)
+	centro.repartirCertificacion()
+	assert.equals(3, fernando.certificaciones().size())
+	centro.repartirCertificacion()
+	assert.equals(4, fernando.certificaciones().size())
+	assert.equals(fernando,centro.vendedorEstrella())
+	assert.that(centro.puedeCubrir(hurlingham))
+	assert.that(centro.puedeCubrir(rawson))
+	assert.equals(#{fernando, franco},centro.vendedoresGenericos())
+	assert.notThat(centro.esRobusto())
+	
+	
+	
+}
